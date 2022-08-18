@@ -24,6 +24,7 @@ public class AdjListTEst {
 		int E = sc.nextInt();	// 간선 수
 		
 		adjList = new Node[N];
+		visited = new boolean[N];
 		
 		for (int i = 0; i < E; i++) {	// 간선 정보에 해당하는 부분만 덮어씀
 			int from = sc.nextInt();
