@@ -5,35 +5,31 @@ import java.util.StringTokenizer;
 
 /**
  * BOJ 1929 소수 구하기
- * 목표 수 -> 시작수
- * bfs 사용
+ * 시간복잡도에 의해 '에라토스테네스의 체' 사용
  * @author kjh
  *
  */
 public class Main_1929_김정효 {
-	static int M;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		find(N);
-	}
+		int M = Integer.parseInt(st.nextToken());
 
-	private static void find(int n) {
-		boolean check = false;
-		if(n+1 == M) return;
-	
-		for (int i = 2; i < Math.sqrt(n); i++) {
-			if (n % i == 0) {
-				break;
-			}check = true;
+		boolean[] check = new boolean[M+1];	// 소수는 true
+		for (int i = 2; i < M+1; i++) {	// 탐색 전, 2~M까지 true 값 넣기 
+			check[i] = true;
 		}
-		if (check) System.out.println(n);
-		find(n+1);
-		return;
+		
+		for (int i = 2; i*i <= M; i++) {
+			if (!check[i]) continue;	// false 이면 탐색 안함
+			for (int j = i*i; j <= M; j+=i) {	// 소수의 배수 지우기
+				check[j] = false;
+			}
+		}
+		// Output
+		for (int i = N; i <= M; i++) {
+			if (check[i]) System.out.println(i);
+		}
 	}
-	
-	
-
 }
