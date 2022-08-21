@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /**
- * BOJ 1929 소수 구하기
+ * BOJ 1929 소수 구하기 - 방법1
  * 시간복잡도에 의해 '에라토스테네스의 체' 사용
  * @author kjh
  *
