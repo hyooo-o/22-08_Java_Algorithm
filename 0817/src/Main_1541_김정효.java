@@ -8,7 +8,7 @@ import java.util.Stack;
  * 1. - 로 나눠서 - 뒤에 수는 다 더하기
  * 2. 더한 뒤 - 붙여주기
  * 3. 남은 수 더하기
- * @author multicampus
+ * @author kjh
  *
  */
 public class Main_1541_김정효 {

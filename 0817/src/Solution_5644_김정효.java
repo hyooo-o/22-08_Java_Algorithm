@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 /**
  * 미완성
- * @author multicampus
+ * @author kjh
  *
  */
 public class Solution_5644_김정효 {
