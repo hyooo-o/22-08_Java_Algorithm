@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 /**
  * SWEA 8382 방향 전환 
  * 아이디어가 중요!!
- * 다른 풀이1. 완전탐색으로도 가능
+ * 다른 풀이 1. 완전탐색으로도 가능
  * @author kjh
  *
  */
