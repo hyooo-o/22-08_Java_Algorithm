@@ -29,7 +29,6 @@ public class Main_7576_±Ë¡§»ø {
 	
 	static int n, m, cnt;
 	static int[][] arr;
-	static boolean[][] visit;
 	static Queue<Map> q = new LinkedList<>();
 	static int[] dx = {-1, 1, 0, 0};
 	static int[] dy = {0, 0, -1, 1};	
@@ -41,7 +40,6 @@ public class Main_7576_±Ë¡§»ø {
 		n = Integer.parseInt(st.nextToken());
 		
 		arr = new int[n][m];
-		visit = new boolean[n][m];
 		for (int i = 0; i < n; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < m; j++) {
@@ -54,18 +52,18 @@ public class Main_7576_±Ë¡§»ø {
 		search(0, 0);
 	}
 
+	static boolean check = false;
 	private static void search(int x, int y) {
-		
 		if(!q.isEmpty()) {
 			Map map = q.poll();
 			for (int i = 0; i <4; i++) {	// ªÛ«œ¡¬øÏ ≈Ωªˆ
 				x = map.x + dx[i];
-				y = map.y + dy[i];		
+				y = map.y + dy[i];
 				if (x>=0 && y>=0 && x<n && y<m) {
 //					System.out.println(x+" "+y);
-					visit[x][y] = true;
 					if(arr[x][y] == -1) continue;
 					else if(arr[x][y] == 0) {
+						check = true;
 						q.add(new Map(x, y));
 						arr[x][y] = arr[map.x][map.y]+1;
 //						for (int k = 0; k < n; k++) {
@@ -81,8 +79,19 @@ public class Main_7576_±Ë¡§»ø {
 			search(x, y);
 			return;
 		}
-		System.out.println(arr[x][y]);
-		
+		if(check) {
+			for (int k = 0; k < n; k++) {
+				for (int j = 0; j < m; j++) {
+					if(arr[k][j] == 0) {
+						System.out.println("-1");
+						return;
+					}
+				}
+			}
+			System.out.println(arr[x][y]);
+		}
+		else System.out.println("0");
+	
 	}
 
 }
