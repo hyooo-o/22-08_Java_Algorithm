@@ -2,9 +2,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 /**
- * BOJ 10026. 적록색맹 - (미완성 - 답이 다름 ㅠ)
+ * BOJ 10026. 적록색맹 - (완성)
  * R, G, B  //  (R, G), B
- * 
+ * DFS 사용
+ * (실수)
+ * Line 75. return: 함수 끝내기, continue: 다음 루프 실행
  * 
  * @author kjh
  *
@@ -58,22 +60,19 @@ public class Main_10026_김정효 {
 	}
 
 	private static void dfs(int x, int y) {
-		int[] dx = {-1, 1, 0, 0};
-		int[] dy = {0, 0, -1, 1};
+		int[] dx = {1, 0, -1, 0};
+		int[] dy = {0, 1, 0, -1};
 		
 		visit[x][y] = true;
-		
 		for (int d = 0; d < 4; d++) {
 			int r = x+dx[d];
 			int c = y+dy[d];
-			
 			if(r>=0 && c>=0 && r<n && c<n) {
-				if (visit[r][c]) return;	// 이미 방문했다면 return
+				if (visit[r][c]) continue;	// 이미 방문했다면 continue!!!!! (실수) return 써서 계속 오류남ㅠ
 				if (arr[x][y] == arr[r][c]) {	// 같은 색상이면 dfs 호출
 					dfs(r, c);
 				}
 			}
-			continue;
 		}
 	}
 
