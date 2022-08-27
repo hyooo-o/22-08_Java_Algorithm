@@ -1,14 +1,23 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+/**
+ * BOJ 10026. 적록색맹 - (미완성 - 답이 다름 ㅠ)
+ * R, G, B  //  (R, G), B
+ * 
+ * 
+ * @author kjh
+ *
+ */
 public class Main_10026_김정효 {
-
+	static char[][] arr;
 	static int n;
+	static boolean[][] visit;
+	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		n = Integer.parseInt(br.readLine());
-		char[][] arr = new char[n][n];
+		arr = new char[n][n];
 		
 		for (int i = 0; i < n; i++) {
 			String str = br.readLine();
@@ -17,16 +26,54 @@ public class Main_10026_김정효 {
 			}
 		}//-----------입력 완료-------------
 		
-		search(0, 0, 0);
+		// 일반인
+		visit = new boolean[n][n];
+		int cnt = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (!visit[i][j]) {
+					dfs(i, j);
+					cnt++;	// 영역이 바뀌면 +1
+				}
+			}
+		}
+		// R == G로 변경
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (arr[i][j] == 'G') arr[i][j] = 'R';
+			}
+		}
+		// 적록색맹
+		visit = new boolean[n][n];
+		int cnt2 = 0;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (!visit[i][j]) {
+					dfs(i, j);
+					cnt2++;	// 영역이 바뀌면 +1
+				}
+			}
+		}
+		System.out.println(cnt+" "+cnt2);
 	}
 
-	private static void search(int x, int y, int cnt) {
+	private static void dfs(int x, int y) {
 		int[] dx = {-1, 1, 0, 0};
 		int[] dy = {0, 0, -1, 1};
 		
-		for (int i = 0; i < 4; i++) {
-			int r = x+dx[i];
-			int c = y+dy[i];
+		visit[x][y] = true;
+		
+		for (int d = 0; d < 4; d++) {
+			int r = x+dx[d];
+			int c = y+dy[d];
+			
+			if(r>=0 && c>=0 && r<n && c<n) {
+				if (visit[r][c]) return;	// 이미 방문했다면 return
+				if (arr[x][y] == arr[r][c]) {	// 같은 색상이면 dfs 호출
+					dfs(r, c);
+				}
+			}
+			continue;
 		}
 	}
 
