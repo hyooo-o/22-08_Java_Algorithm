@@ -41,7 +41,7 @@ public class Main_10971_김정효 {
 
 	private static void dfs(int start, int num, int w, int cnt) {		
 		if(cnt == n) {
-			if(arr[num][start] != 0) {		// 이 조건 작성 안해서 오답 나옴 ㅠ (0이면 원점으로 갈 수 없음)
+			if(arr[num][start] != 0) {		// 이 조건 작성 안해서 오답 나옴 ㅠ (0이면 이동 불가능)
 				w += arr[num][start];
 				_min = Math.min(_min, w);
 			}
