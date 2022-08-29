@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main_17406_김정효 {
@@ -15,7 +16,7 @@ public class Main_17406_김정효 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());	// n x m
 		M = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
 		arr = new int[N][M];
@@ -28,7 +29,8 @@ public class Main_17406_김정효 {
 			for(int j=0; j<M; j++) {
 				arr[i][j] = Integer.parseInt(st.nextToken());
 			}
-		}
+		}	// 배열 입력 완료
+		temp = arr.clone();
 		
 		for(int i=0; i<K; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -36,50 +38,34 @@ public class Main_17406_김정효 {
 			int c = Integer.parseInt(st.nextToken());
 			int s = Integer.parseInt(st.nextToken());
 			
-			rotate(r-1, c-1, s);
-			arr = temp.clone();
-			for(int[] a:temp) {
-				for(int el: a ) {
-					sb.append(el+" ");
+			for (int j = r-s; j <= r+s; j++) {
+				for (int k = c-s; k <= c+s; k++) {
+					if(j>c) {	// 아래
+						temp[j][k-1] = arr[j][k];	// <-
+					}
+					else if(j<c) {	// 위
+						if(j == r-s) {
+							temp[j][k+1] = arr[j][k];
+							continue;
+						}
+						temp[j][k+1] = arr[j][k];	// ->
+					}
+					else if(k>r) {
+						temp[j+1][k] = arr[j][k];
+					}
+					else if(k<r) {
+						temp[j-1][k] = arr[j][k];
+					}
 				}
-				sb.append("\n");
-			}sb.append("\n");
-		}
-		System.out.println(sb);
-		
-		for(int[] a:arr) {
-			for(int el: a ) {
-				total += el;
 			}
-			_min = Math.min(total, _min);
+		}
+		
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				total += temp[i][j];
+			}
+			_min = Math.min(_min, total);
 		}
 		System.out.println(_min);
-	}
-	
-	private static void rotate(int r, int c, int s) {	// (r-s, c-s), (r+s, c+s)
-		check = new boolean[N][M];
-		int nr;
-		int nc;
-		int x = r-s;
-		int y = c-s;
-		
-		int dir=0;
-		
-		while(true) {
-			nr = x+dx[dir];	// 옮길 위치
-			nc = y+dy[dir];
-			
-			if(nr<r-s || nr>r+s || nc<c-s || nc>c+s || check[nr][nc]) {
-				dir = ++dir%4;
-			}
-			else {
-				temp[nr][nc] = arr[x][y];
-				check[nr][nc] = true;
-				x += dx[dir]; 
-				y += dy[dir];
-			}
-			
-			if (x == r+s && y == c+s) break;
-		}
 	}
 }

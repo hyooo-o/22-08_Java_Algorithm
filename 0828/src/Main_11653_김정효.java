@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Main_11653_김정효 {
@@ -14,24 +15,28 @@ public class Main_11653_김정효 {
 		List<Integer> list = new ArrayList<Integer>();
 		
 		if (n == 1) return;
-		while(n != 1) {
-			for (int i = 2; i <= n; i++) {
-				if (n % i == 0 && check(i)) {	// 소수이면서 n의 약수이면
+		for (int i = 2; i <= n; i++) {
+			while(n != 1) {
+//				if (n % i == 0 && check(i)) {	// 소수이면서 n의 약수이면
+				if (n % i == 0) {
 					n /= i;
 					list.add(i);
 					continue;
 				}
+				break;
 			}
 		}
-		list.sort(list);
-		System.out.println(Arrays.toString(list));
+		Collections.sort(list);
+		for (int l : list) {
+			System.out.println(l);
+		}
 	}
 
-	private static boolean check(int i) {
-		for (int j = 2; j < i; j++) {
-			if (i % j == 0) return false;
-		}
-		return true;
-	}
+//	private static boolean check(int i) {
+//		for (int j = 2; j < i; j++) {
+//			if (i % j == 0) return false;
+//		}
+//		return true;
+//	}
 
 }
