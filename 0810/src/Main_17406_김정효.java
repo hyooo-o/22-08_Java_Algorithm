@@ -3,7 +3,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
-
+/**
+ * BOJ 17406. 배열돌리기4 (미완성)
+ * @author kjh
+ *
+ */
 public class Main_17406_김정효 {
 	static int N, M, K;
 	static int[][] arr, temp;
@@ -44,7 +48,7 @@ public class Main_17406_김정효 {
 						temp[j][k-1] = arr[j][k];	// <-
 					}
 					else if(j<c) {	// 위
-						if(j == r-s) {
+						if(k == r-s) {
 							temp[j][k+1] = arr[j][k];
 							continue;
 						}
