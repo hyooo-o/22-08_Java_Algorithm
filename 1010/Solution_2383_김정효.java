@@ -7,9 +7,9 @@ import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 /**
- * 
+ * SWEA 2383 점심 식사시간 (부분집합 + BFS) - 굉장히 어려웠음
  * 1. 사람~계단1, 2 각각 거리 구해서 저장해 놓기
- * 2. 계단 2개 중 1개 선택하는 부분집합 (사람 최대 10명이니깐 2^10 OK)
+ * 2. 계단 2개 중 1개 선택하는 부분집합 (사람 최대 10명이니깐 시간복잡도 2^10 OK)
  * 3. 최대 3명, 나머지 대기 => 시간 측정
  * 
  * @author kjh
@@ -28,8 +28,9 @@ public class Solution_2383_김정효 {
 		for (int tc = 1; tc <= T; tc++) {
 			N = Integer.parseInt(br.readLine());
 			map = new int[N][N];
-			person = new ArrayList<>();
-			d = new ArrayList<>();
+			person = new ArrayList<>();	// 각 사람의 {x좌표, y좌표}
+			stair = new ArrayList<>();	// 계단 0, 1 에 대해 {계단 x좌표, y좌표, 계단 길이}
+			d = new ArrayList<>();		// 각 사람마다 {계단1 입구까지 걸리는 시간, 계단2 입구까지 걸리는 시간}
 			_min = Integer.MAX_VALUE;
 			
 			for (int i = 0; i < N; i++) {
@@ -43,18 +44,19 @@ public class Solution_2383_김정효 {
 					}
 				}
 			}
-			
+			// 초기화
 			for (int i = 0; i < person.size(); i++) {
-				stair.add(new int[] {});
+				d.add(new int[] {i, i});
 			}
 			
 			visit = new boolean[person.size()];
-			distance();
+			distance();		// 거리(시간) 구하기
+			subset(0);		// 부분집합 -> 계단 이용 최소시간 구하기
 			sb.append("#").append(tc).append(" ").append(_min).append("\n");
 		}
 		System.out.println(sb.toString());
 	}
-	// 사람~계단1, 2 각각에 대한 거리 구하기
+	// 모든 사람~계단1, 2 각각에 대한 거리 구하기
 	private static void distance() {
 		for (int i = 0; i < person.size(); i++) {
 			for (int j = 0; j < 2; j++) {
@@ -79,56 +81,56 @@ public class Solution_2383_김정효 {
 	
 	
 	private static void go() {
-		PriorityQueue<Integer> s1 = new PriorityQueue<>();
-		PriorityQueue<Integer> s2 = new PriorityQueue<>();
-		int cnt = person.size();	// 계단을 내려가지 않은 남은 인원
-		int[] st1 = new int[3];		// 계단에 있는 인원
-		int[] st2 = new int[3];
+		PriorityQueue<Integer> s1 = new PriorityQueue<>();	// 계단1 이용자
+		PriorityQueue<Integer> s2 = new PriorityQueue<>();	// 계단2 이용자
+		int cnt = person.size();	// 계단을 내려가지 않은 복도에 남은 인원
+		int[] st1 = new int[3];		// 계단1에 있는 인원
+		int[] st2 = new int[3];		// 계단2에 있는 인원
 		
 		// visit=true => 계단1, visit=false => 계단2
 		for (int i = 0; i < person.size(); i++) {
-			if (visit[i]) {
+			if (visit[i]) {			// 계단1 이용자의 계단 입구까지 걸리는 시간 큐에 넣기
 				s1.offer(d.get(i)[0]);
 				continue;
 			}
-			s2.offer(d.get(i)[1]);
+			s2.offer(d.get(i)[1]);	// 계단2 이용자의 계단 입구까지 걸리는 시간 큐에 넣기
 		}
 		
 		int time = 0;
 		while (true) {
+			// 복도에 있는 사람이 없다면 (모두 계단 이용하러 갔다면)
 			if (cnt == 0) {
 				boolean flag = true;
+				// 계단에 이용자가 있는지 확인
 				for (int i = 0; i < 3; i++) {
-					if (st1[i] != 0) {
-						flag = false;
+					if (st1[i] != 0) {	// 계단1에 이용자가 있다면,
+						flag = false;	// 계단 이용자 처리 계속 해주기
 						break;
 					}
-					if (st2[i] != 0) {
-						flag = false;
+					if (st2[i] != 0) {	// 계단2에 이용자가 있다면
+						flag = false;	// 계단 이용자 처리 계속 해주기
 						break;
 					}
 				}
+				// 계단에 이용자가 없다면 while문 종료
 				if (flag) break;
 			}
 			
-			
-			
 			for (int i = 0; i < 3; i++) {
 				// 계단1
-				// 계단을 이용하는 사람이 없고, 계단 대기자가 있다면
-				if (st1[i] == 0) {
-					if(!s1.isEmpty()) {
-						if (s1.peek() <= time) {	// 도착했다면
+				if (st1[i] == 0) {		// 계단을 이용하는 사람이 없고,
+					if(!s1.isEmpty()) {	// 계단 대기자가 있다면
+						if (s1.peek() <= time) {	// 계단 입구에 도착했다면
 							cnt--;					// 남은 대기자-1
 							st1[i] = stair.get(0)[2];	// 계단 길이 주기
 							s1.poll();
 						}
 					}
 				} else {	// 계단 이용자가 있다면
-					st1[i]--;
-					if (st1[i] == 0) {
-						if(!s1.isEmpty()) {
-							if (s1.peek() <= time) {	// 도착했다면
+					st1[i]--;	// 1분이 지났으니, 계단 이용자를 한 칸 내리고
+					if (st1[i] == 0) {		// 계단을 이용하는 사람이 없고,
+						if(!s1.isEmpty()) {	// 계단 대기자가 있다면
+							if (s1.peek() <= time) {	// 계단 입구에 도착했다면
 								cnt--;					// 남은 대기자-1
 								st1[i] = stair.get(0)[2];	// 계단 길이 주기
 								s1.poll();
@@ -136,7 +138,7 @@ public class Solution_2383_김정효 {
 						}
 					}
 				}
-				// 계단2
+				// 계단2 - 위와 동일
 				if (st2[i] == 0) {
 					if(!s2.isEmpty()) {
 						if (s2.peek() <= time) {	// 도착했다면
@@ -158,8 +160,9 @@ public class Solution_2383_김정효 {
 					}
 				}
 			}
-			time++;
+			time++;	// 1분 지남
 		}
+		// 부분집합 중에 최소 시간 고르기
 		_min = Math.min(_min, time);
 	}
 }
