@@ -8,37 +8,38 @@ import java.io.InputStreamReader;
  * (출력) 최댓값
  * 
  * 	<----	<----
- * n-4	n-3		n-2	n-1	n
- * ?	O		X	O	O	recur[n-1]
- * ?	X		O	X	O	dp[] + 
- * X	O		O	X	O 	dp[] + 
- * 
- * X	X		O	X	O 	arr[3]
- * O	O		X	X	O	dp[2]
- * X	O		X	O	O 	arr[2] + arr[4]
+ * n-4	n-3		n-2		n-1		n
+ * ?	O		X		O		O	arr[n-1] + recur[n-3]
+ * ?	X		O		X		O	recur[n-2] + 
+ * X	O		O		X		O 	
  * 
  * @author kjh
  *
  */
 public class Main_2759_김정효 {
-
+	static int dp[], arr[];
+	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
-		int[] arr = new int[n+1];
-		int[] dp = new int[n+1];
+		arr = new int[n+1];
+		dp = new int[n+1];
 		
 		for (int i = 1; i <= n; i++) {
 			arr[i] = Integer.parseInt(br.readLine());
 		}
 		
 		dp[1] = arr[1];
-		dp[2] = dp[1] + arr[2];
 		
-		for (int i = 1; i < n; i++) {
-			
+		if (n > 1) {
+			dp[2] = dp[1] + arr[2];
 		}
 		
+		for (int i = 3; i <= n; i++) {
+			dp[n] = Math.max(dp[n-2], dp[n-3] + arr[n-1]) + arr[n];
+		}
+		
+		System.out.println(dp[n]);
+		
 	}
-
 }
