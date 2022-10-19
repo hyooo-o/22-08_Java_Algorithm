@@ -8,10 +8,9 @@ import java.io.InputStreamReader;
  * (출력) 최댓값
  * 
  * 	<----	<----
- * n-4	n-3		n-2		n-1		n
- * ?	O		X		O		O	arr[n-1] + recur[n-3]
- * ?	X		O		X		O	recur[n-2] + 
- * X	O		O		X		O 	
+ * n-3		n-2		n-1		n
+ * O		X		O		O	dp[n] = arr[n-1] + dp[n-3]
+ * 			?		X		O	dp[n] = dp[n-2]
  * 
  * @author kjh
  *
@@ -29,14 +28,11 @@ public class Main_2759_김정효 {
 			arr[i] = Integer.parseInt(br.readLine());
 		}
 		
-		dp[1] = arr[1];
-		
-		if (n > 1) {
-			dp[2] = dp[1] + arr[2];
-		}
-		
-		for (int i = 3; i <= n; i++) {
-			dp[n] = Math.max(dp[n-2], dp[n-3] + arr[n-1]) + arr[n];
+		for (int i = 1; i <= n; i++) {
+			if (i == 1) dp[1] = arr[1];
+			else if (i == 2) dp[2] = dp[1] + arr[2];
+			else if (i == 3) dp[3] = Math.max(arr[2], arr[1]) + arr[3];
+			else dp[i] = Math.max(dp[i-2], dp[i-3] + arr[i-1]) + arr[i];
 		}
 		
 		System.out.println(dp[n]);
